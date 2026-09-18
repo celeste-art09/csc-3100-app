@@ -1,6 +1,8 @@
 //backend.js
 import express from "express";
 
+//
+
 const findUserByName = (name) => {
   return users["users_list"].filter((user) => user["name"] === name);
 }
@@ -13,7 +15,7 @@ const findUserByJobAndName = (name, job) => {
 const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
-
+//
 
 const addUser = (user) => {
   users["users_list"].push(user);
@@ -24,6 +26,8 @@ const deleteUser = (user) => {
   users["users_list"] = users["users_list"].filter((u) => u["id"] !== user["id"]);
   return user;
 }
+
+//
 
 const users = {
     users_list :[
@@ -55,6 +59,8 @@ const users = {
     ],
 }
 
+//
+
 const app = express();
 const port = 8000;
 
@@ -62,6 +68,17 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+app.get("/users", (req, res) => {
+  const {name, job} = req.query;
+  if (name != undefined && job != undefined) {
+    let result = findUserByJobAndName(name, job);
+    result = { users_list: result};
+    res.send(result);
+  }else{
+    res.send(users);
+  }
 });
 
 app.get("/users", (req, res) => {
@@ -75,16 +92,7 @@ app.get("/users", (req, res) => {
   }
   });
 
-app.get("/users", (req, res) => {
-  const {name, job} = req.query;
-  if (name != undefined && job != undefined) {
-    let result = findUserByJobAndName(name, job);
-    result = { users_list: result};
-    res.send(result);
-  }else{
-    res.send(users);
-  }
-});
+
 
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"];
@@ -95,6 +103,7 @@ app.get("/users/:id", (req, res) => {
     res.send(result);
   }
 });
+
 
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
