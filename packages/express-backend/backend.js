@@ -1,6 +1,6 @@
 //backend.js
 import express from "express";
-
+import cors from "cors";
 //
 
 const findUserByName = (name) => {
@@ -63,6 +63,8 @@ const users = {
 
 const app = express();
 const port = 8000;
+
+app.use(cors());
 
 app.use(express.json());
 
